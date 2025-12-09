@@ -2,252 +2,204 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>Classement Elo de la classe</title>
+  <title>Classement de la Classe</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background: #f5f5f5;
       margin: 0;
-      padding: 0;
-    }
-    header {
-      background: #222;
-      color: white;
-      padding: 15px 0;
-      margin-bottom: 20px;
-    }
-    h1 {
-      margin: 0;
-      font-size: 24px;
-    }
-
-    /* DUEL */
-    #duel-container {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: radial-gradient(circle at top, #2b2d42, #000);
+      color: #f7f7ff;
+      min-height: 100vh;
       display: flex;
+      flex-direction: column;
+    }
+
+    .hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       justify-content: center;
-      gap: 20px;
-      margin-top: 20px;
-      flex-wrap: wrap;
+      padding: 30px 20px 10px;
+      text-align: center;
     }
 
-    .card {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      width: 200px;
-      cursor: pointer;
-      transition: transform 0.1s, box-shadow 0.1s;
-    }
-
-    .card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }
-
-    .avatar {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-bottom: 10px;
-    }
-
-    .name {
-      font-size: 18px;
-      margin-bottom: 10px;
-    }
-    .elo {
-      font-size: 14px;
-      color: #555;
-    }
-
-    #ranking {
-      max-width: 400px;
-      margin: 40px auto;
-      text-align: left;
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    #ranking h2 {
-      margin-top: 0;
-    }
-
-    #ranking ol {
-      padding-left: 20px;
-    }
-
-    #ranking li {
-      margin-bottom: 5px;
-    }
-
-    #status {
-      margin-top: 15px;
-      color: #555;
-      font-size: 14px;
-    }
-
-    button {
-      padding: 8px 15px;
-      border: none;
-      border-radius: 4px;
-      background: #222;
-      color: white;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    button:hover {
-      background: #444;
-    }
-
-    #admin-link {
-      position: fixed;
-      bottom: 10px;
-      right: 10px;
+    .badge {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 6px 14px;
+      border-radius: 999px;
       font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
-    #admin-link a {
-      color: #555;
+
+    .badge span {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #00f5d4;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin: 0 0 10px;
+    }
+
+    h1 span.highlight {
+      color: #ffbe0b;
+    }
+
+    .subtitle {
+      max-width: 450px;
+      margin: 0 auto 24px;
+      color: #d0d0f5;
+      font-size: 14px;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 22px;
+      font-size: 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #ff006e, #ffbe0b);
+      color: #111;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: #f7f7ff;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.18);
+      transform: translateY(-1px);
+    }
+
+    .rules-card {
+      background: rgba(10, 10, 20, 0.9);
+      border-radius: 18px;
+      padding: 18px 20px;
+      max-width: 480px;
+      margin: 0 auto 20px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+      text-align: left;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .rules-card h2 {
+      margin: 0 0 10px;
+      font-size: 16px;
+    }
+
+    .rules-card ul {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 13px;
+      color: #c8c8f5;
+    }
+
+    .rules-card li + li {
+      margin-top: 4px;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 11px;
+      padding: 10px 0 12px;
+      color: #8f8fb3;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    footer a {
+      color: #c1c1ff;
       text-decoration: none;
     }
-    #admin-link a:hover {
+    footer a:hover {
       text-decoration: underline;
+    }
+
+    @media (min-width: 768px) {
+      h1 {
+        font-size: 40px;
+      }
+      .subtitle {
+        font-size: 15px;
+      }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Classement Elo de la classe</h1>
-  </header>
-
-  <!-- DUEL -->
-  <div id="duel-container">
-    <div id="cardA" class="card">
-      <img id="avatarA" class="avatar" src="default-avatar.png" alt="Avatar A" />
-      <div class="name" id="nameA">...</div>
-      <div class="elo" id="eloA"></div>
+  <main class="hero">
+    <div class="badge">
+      <span></span> Projet fun de la promo
     </div>
 
-    <div id="cardB" class="card">
-      <img id="avatarB" class="avatar" src="default-avatar.png" alt="Avatar B" />
-      <div class="name" id="nameB">...</div>
-      <div class="elo" id="eloB"></div>
+    <h1>
+      Le
+      <span class="highlight">Classement</span>
+      de la Classe
+    </h1>
+
+    <p class="subtitle">
+      Vote pour tes camarades dans des duels 1 contre 1, le système Elo fait le
+      reste. Objectif : un classement fun, pas un outil pour se clasher.
+    </p>
+
+    <div class="buttons">
+      <a href="/vote.html" class="btn btn-primary">
+        🚀 Commencer à voter
+      </a>
+      <a href="/admin.html" class="btn btn-secondary">
+        🔐 Admin
+      </a>
     </div>
-  </div>
 
-  <div id="status"></div>
+    <section class="rules-card">
+      <h2>Règles du jeu 🧠</h2>
+      <ul>
+        <li>Chaque duel oppose deux personnes de la classe.</li>
+        <li>Tu cliques sur celle qui correspond le plus au critère du moment.</li>
+        <li>Les notes Elo montent ou descendent à chaque vote.</li>
+        <li>C’est un jeu : pas d’insultes, pas de prise de tête.</li>
+      </ul>
+    </section>
+  </main>
 
-  <button id="skip">Passer ce duel</button>
-
-  <!-- CLASSEMENT TOP 3 -->
-  <div id="ranking">
-    <h2>Top 3</h2>
-    <ol id="ranking-list"></ol>
-  </div>
-
-  <div id="admin-link">
-    <a href="/admin.html">Admin</a>
-  </div>
-
-  <script>
-    const API_URL = "/api";
-
-    let currentPair = [];
-
-    const cardA = document.getElementById("cardA");
-    const cardB = document.getElementById("cardB");
-    const nameA = document.getElementById("nameA");
-    const nameB = document.getElementById("nameB");
-    const eloA = document.getElementById("eloA");
-    const eloB = document.getElementById("eloB");
-    const avatarA = document.getElementById("avatarA");
-    const avatarB = document.getElementById("avatarB");
-    const statusDiv = document.getElementById("status");
-    const rankingList = document.getElementById("ranking-list");
-    const skipBtn = document.getElementById("skip");
-
-    const DEFAULT_AVATAR = "default-avatar.png";
-
-    async function loadPair() {
-      statusDiv.textContent = "Chargement du duel...";
-      try {
-        const res = await fetch(API_URL + "/pair");
-        const data = await res.json();
-
-        currentPair = data;
-
-        nameA.textContent = data[0].name;
-        nameB.textContent = data[1].name;
-
-        eloA.textContent = "Elo : " + Math.round(data[0].elo);
-        eloB.textContent = "Elo : " + Math.round(data[1].elo);
-
-        avatarA.src = data[0].avatar || DEFAULT_AVATAR;
-        avatarB.src = data[1].avatar || DEFAULT_AVATAR;
-
-        statusDiv.textContent = "Clique sur la personne que tu préfères 👇";
-      } catch (err) {
-        console.error(err);
-        statusDiv.textContent = "Erreur lors du chargement du duel.";
-      }
-    }
-
-    async function loadRanking() {
-      try {
-        const res = await fetch(API_URL + "/students?limit=3"); // top 3 seulement
-        const data = await res.json();
-
-        rankingList.innerHTML = "";
-
-        data.forEach((student, index) => {
-          const li = document.createElement("li");
-          li.textContent = `${index + 1}. ${student.name} (Elo: ${Math.round(student.elo)})`;
-          rankingList.appendChild(li);
-        });
-      } catch (err) {
-        console.error(err);
-        statusDiv.textContent = "Erreur lors du chargement du classement.";
-      }
-    }
-
-    async function vote(winnerIndex) {
-      if (currentPair.length !== 2) return;
-
-      const winner = currentPair[winnerIndex];
-      const loser = currentPair[1 - winnerIndex];
-
-      statusDiv.textContent = `Tu as voté pour ${winner.name}... mise à jour du classement`;
-
-      try {
-        await fetch(API_URL + "/vote", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            winnerId: winner.id,
-            loserId: loser.id,
-          }),
-        });
-
-        await loadPair();
-        await loadRanking();
-      } catch (err) {
-        console.error(err);
-        statusDiv.textContent = "Erreur lors de l'envoi du vote.";
-      }
-    }
-
-    cardA.addEventListener("click", () => vote(0));
-    cardB.addEventListener("click", () => vote(1));
-    skipBtn.addEventListener("click", () => {
-      loadPair();
-    });
-
-    loadPair();
-    loadRanking();
-  </script>
+  <footer>
+    Projet créé par <strong>Titouan</strong> – Si tu veux être retiré(e) du classement,
+    parle-lui directement.
+  </footer>
 </body>
 </html>
