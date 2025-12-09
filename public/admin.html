@@ -39,10 +39,38 @@
       text-align: center;
       margin-top: 20px;
     }
+    #actions {
+      text-align: center;
+      margin-top: 10px;
+    }
+    button {
+      padding: 8px 15px;
+      border: none;
+      border-radius: 4px;
+      background: #222;
+      color: white;
+      cursor: pointer;
+      margin: 5px;
+    }
+    button:hover {
+      background: #444;
+    }
+    #status {
+      text-align: center;
+      margin-top: 10px;
+      color: #555;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
   <h1>Admin - Classement complet</h1>
+
+  <div id="actions">
+    <button onclick="resetRanking()">🔁 Reset classement (ELO = 1000)</button>
+  </div>
+
+  <p id="status"></p>
 
   <table id="table">
     <thead>
@@ -56,10 +84,12 @@
     <tbody></tbody>
   </table>
 
-  <a id="back" href="/">Retour au site public</a>
+  <a id="back" href="/">← Retour au site public</a>
 
   <script>
     const PASSWORD = "admin42"; // change-le si tu veux
+    const DEFAULT_AVATAR = "default-avatar.png";
+
     const input = prompt("Mot de passe admin :");
     if (input !== PASSWORD) {
       alert("Accès refusé");
@@ -67,8 +97,6 @@
     } else {
       loadAll();
     }
-
-    const DEFAULT_AVATAR = "default-avatar.png";
 
     async function loadAll() {
       const res = await fetch("/api/students");
@@ -101,6 +129,33 @@
 
         tbody.appendChild(tr);
       });
+    }
+
+    async function resetRanking() {
+      if (!confirm("Tu es sûr de vouloir remettre tout le monde à 1000 et effacer l'historique des duels ?")) {
+        return;
+      }
+
+      const status = document.getElementById("status");
+      status.textContent = "Réinitialisation en cours...";
+
+      try {
+        const res = await fetch("/api/admin/reset", {
+          method: "POST"
+        });
+
+        if (!res.ok) {
+          status.textContent = "Erreur lors de la réinitialisation.";
+          return;
+        }
+
+        const data = await res.json();
+        status.textContent = data.message || "Classement réinitialisé.";
+        await loadAll(); // recharger le tableau
+      } catch (err) {
+        console.error(err);
+        status.textContent = "Erreur réseau lors de la réinitialisation.";
+      }
     }
   </script>
 </body>

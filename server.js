@@ -150,6 +150,22 @@ app.post("/api/vote", (req, res) => {
     }
   );
 });
+// ---------- API : reset du classement (admin) ----------
+app.post("/api/admin/reset", (req, res) => {
+  db.serialize(() => {
+    // Remet tous les ELO à 1000
+    db.run("UPDATE students SET elo = 1000", [], (err) => {
+      if (err) return res.status(500).json({ error: err.message });
+
+      // On supprime aussi l'historique des matches
+      db.run("DELETE FROM matches", [], (err2) => {
+        if (err2) return res.status(500).json({ error: err2.message });
+
+        res.json({ message: "Classement réinitialisé, tous les ELO = 1000" });
+      });
+    });
+  });
+});
 
 app.listen(PORT, () => {
   console.log("Serveur lancé sur http://localhost:" + PORT);
